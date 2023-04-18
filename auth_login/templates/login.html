@@ -66,13 +66,15 @@ span.psw {
 }
 
 
+
     </style>
 </head>
 <body>
 
 <h2>Login Form</h2>
 
-<form action="login/" method="post">
+<form action="/login/" method="post">
+    {% csrf_token %}
     <div class="container" style="width:500px">
         <label for="username"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="username" required>
@@ -81,14 +83,19 @@ span.psw {
         <input type="password" placeholder="Enter Password" name="password" required>
 
         <button type="submit">Login</button>
+        <div>
+            {{ message }}
+        </div>
         <label>
             <input type="checkbox" checked="checked" name="remember"> Remember me
         </label>
+
+
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
         <button type="button" class="cancelbtn">Cancel</button>
-<!--        <span class="psw">Forgot <a href="#">password?</a></span>-->
+        <!--        <span class="psw">Forgot <a href="#">password?</a></span>-->
     </div>
 </form>
 
