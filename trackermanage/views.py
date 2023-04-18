@@ -2,14 +2,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import *
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def chartPage(request):
     return render(request, 'index.html')
 
 # Asset Types Crud operations...
+@login_required
 def addData(request):
     if request.method=='POST':
         asset_form=AssetTypeForm(request.POST)
@@ -21,11 +22,13 @@ def addData(request):
     data=AssetType.objects.all()
     return render(request,'assettype.html',{'form':asset_form,'data':data})
 
+@login_required
 def deleteData(request,id):
     data=AssetType.objects.get(pk=id)
     data.delete()
     return redirect('/adddata')
 
+@login_required
 def updateData(request,id):
     if request.method=='POST':
         obj=AssetType.objects.get(pk=id)
@@ -41,6 +44,7 @@ def updateData(request,id):
 
 # Manage Assets crud operations..
 
+@login_required
 def manageAdd(request):
     if request.method=='POST':
         name=request.POST['assetname']
@@ -53,11 +57,13 @@ def manageAdd(request):
     data=ManageAsset.objects.all()
     return render(request,'manageasset.html',{'data':data})
 
+@login_required
 def delete_manage(request,id):
     data=ManageAsset.objects.get(pk=id)
     data.delete()
     return redirect('/manageadd')
 
+@login_required
 def update_manage(request,id):
     if request.method=='POST':
         obj=ManageAsset.objects.get(pk=id)
@@ -65,9 +71,6 @@ def update_manage(request,id):
         types=int(request.POST['assettype'])
         assetObj=AssetType.objects.get(pk=types)
         image=request.FILES['assetimage']
-        print(types)
-        print('--------')
-        print(obj)
 
         active=True if request.POST['is_active']=='on' else False
         obj.assetname=name
