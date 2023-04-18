@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-5">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Asset Types</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="card-body">
+          {{form.as_p}}
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  <div class="col-md-7">
+    <div class="card card-success">
+      <div class="card-header">
+        <h3 class="card-title">Asset Table</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="width: 10px">AssetID</th>
+              <th>Asset</th>
+              <th>Description</th>
+              <th>CreatedAt</th>
+              <th>UpdatedAt</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in data %}
+            <tr>
+              <td style='width:2%'>{{forloop.counter}}</td>
+              <td>{{d.assettype}}</td>
+              <td>{{d.description}}</td>
+              <td>{{d.created_at}}</td>
+              <td>{{d.updated_at}}</td>
+              <td><a href="{% url 'updateData' d.pk %}">edit</a> <a href="{% url 'DeleteData' d.pk %}"
+                onclick="return confirm('Are you sure you want to delete this item?');">delete</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer clearfix">
+        <ul class="pagination pagination-sm m-0 float-right">
+          <li class="page-item"><a class="page-link" href="#">«</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">»</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- /.card -->
+    <!-- /.card -->
+  </div>
+</div>
+{% endblock %}
+

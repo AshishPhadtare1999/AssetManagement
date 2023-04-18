@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-5">
+    <div class="card card-primary">
+      <div class="card-header">
+        <h3 class="card-title">Asset Types update</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="card-body">
+          {{form.as_p}}
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-success">Update</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

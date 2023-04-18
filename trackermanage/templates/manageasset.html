@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">ManageAsset Form</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+<div class="card-body">
+    <p>
+        <label for="id_assetname">Asset Name:</label>
+        <input type="text" name="assetname" class="form-control" maxlength="50" required="" id="id_assetname">
+    </p>
+
+  
+    <p>
+        <label for="id_assettype">Assettype:</label>
+        <select name="assettype" class="form-control" required="" id="id_assettype">
+          <option value="" selected>--Select--</option>
+
+          <option value="1">Laptops</option>
+
+          <option value="2">Routers</option>
+
+          <option value="5">Mobile</option>
+
+          <option value="8">Charger</option>
+
+        </select>
+    
+    </p>
+    <p>
+      <label for="id_assetimage">Image:</label>
+      <input type="file" name="myimage" class="form-control" accept="image/*" required="" id="id_assetimage">
+    </p>
+    
+    <p>
+      <label for="id_is_active">Active:</label>
+      <input type="checkbox" name="is_active" id="id_is_active" checked=""> 
+    </p>
+</div>
+            <!-- /.card-body -->
+    
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+    
+
+<div class="card card-success">
+    <div class="card-header">
+    <h3 class="card-title">ManageAsset Table</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th style="width: 10px">ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Image</th>
+            <th>isActive</th>
+            <th>CreatedAt</th>
+            <th>UpdatedAt</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for d in data %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{d.assetname}}</td>
+            <td>{{d.assettype}}</td>
+            <td>{{d.assetimage}}</td>
+            <td>{{d.is_active}}</td>
+            <td>{{d.created_at}}</td>
+            <td>{{d.updated_at}}</td>
+            <td><a href="{% url 'manageUpdate' d.pk %}">edit</a> <a href="{% url 'manageDelete' d.pk %}"
+            onclick="return confirm('Are you sure you want to delete this item?');">delete</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer clearfix">
+    <ul class="pagination pagination-sm m-0 float-right">
+        <li class="page-item"><a class="page-link" href="#">«</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">»</a></li>
+    </ul>
+    </div>
+</div>
+
+
+{% endblock %}
+
