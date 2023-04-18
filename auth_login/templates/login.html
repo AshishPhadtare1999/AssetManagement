@@ -6,7 +6,7 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 form {border: 3px solid #f1f1f1;}
 
-input[type=text], input[type=password] {
+input[type=email], input[type=password] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -14,6 +14,7 @@ input[type=text], input[type=password] {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
 
 button {
   background-color: #04AA6D;
@@ -68,6 +69,8 @@ span.psw {
 
 
 
+
+
     </style>
 </head>
 <body>
@@ -77,8 +80,8 @@ span.psw {
 <form action="/login/" method="post">
     {% csrf_token %}
     <div class="container" style="width:500px">
-        <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
+        <label for="email"><b>Email</b></label>
+        <input type="email" placeholder="Enter Email" name="email" required>
 
         <label for="password"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>
@@ -90,8 +93,6 @@ span.psw {
         <label>
             <input type="checkbox" checked="checked" name="remember"> Remember me
         </label>
-
-
     </div>
 
     <div class="container" style="background-color:#f1f1f1">

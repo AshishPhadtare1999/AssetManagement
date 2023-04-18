@@ -1,7 +1,10 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+
 from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
 
 
 def login_user(request):
@@ -10,7 +13,7 @@ def login_user(request):
             return redirect("/")
         return render(request, template_name="login.html")
 
-    user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
+    user = authenticate(request, email=request.POST["email"], password=request.POST["password"])
     if user is not None:
         login(request, user)
         return redirect("/")
