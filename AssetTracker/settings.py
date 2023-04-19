@@ -133,3 +133,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/login/'
+
+AUTHENTICATION_BACKENDS = ['auth_login.authentication.EmailBackend']
