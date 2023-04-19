@@ -46,7 +46,7 @@
           <tbody>
             {% for d in data %}
             <tr>
-              <td style='width:2%'>{{forloop.counter}}</td>
+              <td style='width:2%'>{{d.pk}}</td>
               <td>{{d.assettype}}</td>
               <td>{{d.description}}</td>
               <td>{{d.created_at}}</td>
@@ -58,16 +58,43 @@
           </tbody>
         </table>
       </div>
-      <!-- /.card-body -->
-      <div class="card-footer clearfix">
-        <ul class="pagination pagination-sm m-0 float-right">
-          <li class="page-item"><a class="page-link" href="#">«</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">»</a></li>
-        </ul>
-      </div>
+      {% if data.has_other_pages %}
+      <nav>
+        <ul class="pagination justify-content-center">
+          {% if data.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ data.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+            </li>
+          {% endif %}
+  
+          {% for p in data.paginator.page_range %}
+            {% if data.number == p %}
+              <li class="page-item"><a class="page-link" style="color: red;" href="#">{{ p }}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+            {% endif %}
+          {% endfor %}
+  
+          {% if data.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ data.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link" aria-hidden="true">&raquo;</span>
+            </li>
+          {% endif %}
+      </ul>
+      </nav>
+    {% endif %}
     </div>
     <!-- /.card -->
     <!-- /.card -->

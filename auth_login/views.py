@@ -10,7 +10,8 @@ def login_user(request):
             return redirect("/")
         return render(request, template_name="login.html")
 
-    user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
+    user = authenticate(request, email=request.POST["email"], password=request.POST["password"])
+    print(user)
     if user is not None:
         login(request, user)
         return redirect("/")

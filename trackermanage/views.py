@@ -3,14 +3,15 @@ from django.http import HttpResponse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
-@login_required
+# @login_required
 def chartPage(request):
     return render(request, 'index.html')
 
 # Asset Types Crud operations...
-@login_required
+# @login_required
 def addData(request):
     if request.method=='POST':
         asset_form=AssetTypeForm(request.POST)
@@ -19,8 +20,17 @@ def addData(request):
             asset_form=AssetTypeForm()
     else:
         asset_form=AssetTypeForm()
-    data=AssetType.objects.all()
-    return render(request,'assettype.html',{'form':asset_form,'data':data})
+    data=AssetType.objects.all().order_by('-created_at')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(data, 2)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    return render(request,'assettype.html',{'form':asset_form,'data':posts})
 
 @login_required
 def deleteData(request,id):
@@ -54,8 +64,16 @@ def manageAdd(request):
         active=True if request.POST['is_active']=='on' else False
         manage_form=ManageAsset.objects.create(assetname=name,assettype=obj,assetimage=image,is_active=active)
         return redirect('/manageadd')
-    data=ManageAsset.objects.all()
-    return render(request,'manageasset.html',{'data':data})
+    data=ManageAsset.objects.all().order_by('-created_at')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(data, 4)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request,'manageasset.html',{'data':posts})
 
 @login_required
 def delete_manage(request,id):
