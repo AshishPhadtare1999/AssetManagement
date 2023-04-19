@@ -4,14 +4,26 @@ from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
 
 # Create your views here.
-# @login_required
+@login_required
 def chartPage(request):
-    return render(request, 'index.html')
+    data=AssetType.objects.all().values('assettype').annotate(total=Count('assettype'))
+    active_data=ManageAsset.objects.all().values('is_active').annotate(total=Count('is_active'))
+    print(active_data)
+    labels =['on', 'of']
+    values = [0, 0]
+    for obj in active_data:
+        if obj["is_active"]:
+          values[0] = obj["total"]
+        else:
+            values[1] = obj["total"]  
+    print(f'{labels=}, {values=}')
+    return render(request, 'index.html',{'data':data, "titles": labels, 'values':values})
 
 # Asset Types Crud operations...
-# @login_required
+@login_required
 def addData(request):
     if request.method=='POST':
         asset_form=AssetTypeForm(request.POST)
@@ -61,7 +73,7 @@ def manageAdd(request):
         types=int(request.POST['assettype'])
         obj=AssetType.objects.get(pk=types)
         image=request.FILES['myimage']
-        active=True if request.POST['is_active']=='on' else False
+        active=True if request.POST.get('is_active')=='on' else False
         manage_form=ManageAsset.objects.create(assetname=name,assettype=obj,assetimage=image,is_active=active)
         return redirect('/manageadd')
     data=ManageAsset.objects.all().order_by('-created_at')
@@ -89,8 +101,7 @@ def update_manage(request,id):
         types=int(request.POST['assettype'])
         assetObj=AssetType.objects.get(pk=types)
         image=request.FILES['assetimage']
-
-        active=True if request.POST['is_active']=='on' else False
+        active=True if request.POST.get('is_active')=='on' else False
         obj.assetname=name
         obj.assettype=assetObj
         obj.assetimage=image
