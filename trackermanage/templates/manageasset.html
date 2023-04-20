@@ -22,15 +22,9 @@
         <label for="id_assettype">Assettype:</label>
         <select name="assettype" class="form-control" required="" id="id_assettype">
           <option value="" selected>--Select--</option>
-
-          <option value="1">Laptops</option>
-
-          <option value="2">Routers</option>
-
-          <option value="5">Mobile</option>
-
-          <option value="8">Charger</option>
-
+          {% for a in asset_list %}
+          <option value="{{a.pk}}">{{a.assettype}}</option>
+          {% endfor %}
         </select>
     
     </p>
@@ -56,6 +50,7 @@
 <div class="card card-success">
     <div class="card-header">
     <h3 class="card-title">ManageAsset Table</h3>
+    <p class="text text-danger" style="margin-left:90%"><button onclick='downloadReport()'>Download</button></p>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -78,7 +73,7 @@
             <td>{{forloop.counter}}</td>
             <td>{{d.assetname}}</td>
             <td>{{d.assettype}}</td>
-            <td>{{d.assetimage}}</td>
+            <td><a href="/media/{{d.assetimage}}" download> <img src="/media/{{d.assetimage}}" class='img-circle elevation-2' style="height:50px;widht:50px"> </a></td>
             <td>{{d.is_active}}</td>
             <td>{{d.created_at}}</td>
             <td>{{d.updated_at}}</td>
@@ -126,8 +121,38 @@
     </ul>
     </nav>
   {% endif %}
+
+  <a href="/manageadd?download=3" id="download_file" hidden download>  </a>
 </div>
 
+<script>
 
+  function downloadFile(){
+    alert("got you requests...");
+    myInterval = setInterval(function(){
+      $.ajax({
+        url:'/manageadd?download=2',
+        method:'get',
+        contentType:"application/json",
+        success:function(result){
+          if(result?.is_file_ready){
+            document.getElementById("download_file").click();
+            clearInterval(myInterval);
+          }
+        }
+      })
+    }, 4000);
+  }
+
+  
+  function downloadReport(){
+    $.ajax({
+      url:'/manageadd?download=1',
+      method:'get',
+      success:downloadFile
+    })
+  };
+
+</script>
 {% endblock %}
 

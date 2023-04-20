@@ -1,10 +1,11 @@
 from django.db import models
 import uuid
+
 # Create your models here.
 
 class AssetType(models.Model):
     assetid=models.AutoField(primary_key=True)
-    assettype=models.CharField('Asset Type',max_length=50,blank=False,null=False)
+    assettype=models.CharField('Asset Type',max_length=50,blank=False,null=False,unique=True)
     description=models.CharField('Description',max_length=500,null=True,blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)

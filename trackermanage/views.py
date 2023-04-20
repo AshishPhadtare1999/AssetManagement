@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,FileResponse,JsonResponse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count
+import pandas as pd
+import tempfile
+from django.core.serializers import serialize
+from .task import *
+import json
 
 # Create your views here.
 @login_required
@@ -34,7 +39,7 @@ def addData(request):
         asset_form=AssetTypeForm()
     data=AssetType.objects.all().order_by('-created_at')
     page = request.GET.get('page', 1)
-    paginator = Paginator(data, 2)
+    paginator = Paginator(data, 4)
     try:
         posts = paginator.page(page)
     except PageNotAnInteger:
@@ -85,7 +90,35 @@ def manageAdd(request):
         posts = paginator.page(1)
     except EmptyPage:
         posts = paginator.page(paginator.num_pages)
-    return render(request,'manageasset.html',{'data':posts})
+    asset_list=AssetType.objects.all()
+    
+    # Download response none normal get request...
+
+    download = request.GET.get("download")
+    if download:
+        print("your request has been in queue...")
+        if download == "1":
+            sleepy.delay(10)
+            return HttpResponse("")
+        elif download=="2":
+            import os
+            return JsonResponse({"is_file_ready":os.path.exists("assetManage.csv")})
+        else: 
+            import os
+            if os.path.exists("assetManage.csv"):
+                return FileResponse(open("assetManage.csv", 'rb'))
+            raise Exception("Not Found")
+    # if request.GET.get("download"):
+    #     print("your request has been in que")
+    #     sleepy.delay(10)
+    #     with tempfile.TemporaryDirectory() as tmpdirname:
+    #         df=pd.DataFrame(data)
+    #         file_loc = f"{tmpdirname}/assetManage.csv"
+    #         print("tmpdirname>>.....", tmpdirname)
+    #         df.to_csv(file_loc,index=False)
+    #         return FileResponse(open(file_loc, 'rb'))
+
+    return render(request,'manageasset.html',{'data':posts,'asset_list':asset_list})
 
 @login_required
 def delete_manage(request,id):
