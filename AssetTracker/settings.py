@@ -136,8 +136,17 @@ LOGIN_REDIRECT_URL = '/login/'
 
 AUTHENTICATION_BACKENDS = ['auth_login.authentication.EmailBackend']
 
-CELERY_BROKER_URL="redis://127.0.0.1:6379"
-CELERY_RESULT_BACKEND="redis://127.0.0.1:6379"
-CELERY_ACCEPT_CONTENT=["application/json"]
-CELERY_RESULT_SERIALIZER="json"
-CELERY_TASK_SERIALIZER="json"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
+
+from datetime import timedelta
+
+CELERY_BEAT_SCHEDULE = {
+    "sample": {
+        "task": "trackermanage.task.sample_task",
+        "schedule": timedelta(seconds=3)
+    },
+}

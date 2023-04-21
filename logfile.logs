@@ -1,0 +1,2 @@
+[2023-04-20 18:30:23,014: INFO/MainProcess] Scheduler: Sending due task sample_task (trackermanage.task.sample_task)
+[2023-04-20 18:30:53,034: INFO/MainProcess] Scheduler: Sending due task sample_task (trackermanage.task.sample_task)
